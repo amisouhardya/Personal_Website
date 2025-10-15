@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Souhardya Paul</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scroll-padding for sticky header */
+        html {
+            scroll-padding-top: 5rem; /* Height of the sticky navbar */
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #1D4ED8;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Custom styles for Tic-Tac-Toe cells (Enhanced for Tailwind) */
+        .game-cell {
+            /* Tailwind classes manage most of the styling now */
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.1s;
+            position: relative; 
+            /* Square aspect ratio trick */
+            width: 100%;
+            padding-top: 100%; 
+        }
+        .game-cell:not(.disabled):hover {
+            background-color: #E5E7EB; /* secondary-gray equivalent */
+        }
+        .game-cell span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        /* Player colors */
+        .game-cell.X span {
+            color: #EF4444; /* Tailwind Red-500 */
+        }
+        .game-cell.O span {
+            color: #3B82F6; /* Tailwind Blue-500 */
+        }
+        .game-cell.winning-cell {
+            background-color: #BBF7D0; /* Tailwind green-200 */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1D4ED8',
+                        'secondary-gray': '#F3F4F6',
+                        'dark-text': '#1F2937'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-dark-text min-h-screen">
+
+    <header class="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-4 sm:py-0">
+                
+                <div class="flex items-center justify-start w-full sm:w-auto mb-3 sm:mb-0">
+                    <h1 class="text-2xl font-extrabold text-primary-blue tracking-tight">
+                        amisouhardya
+                    </h1>
+                </div>
+
+                <nav class="w-full sm:w-auto">
+                    <ul class="flex flex-wrap justify-center sm:justify-end space-x-2 sm:space-x-4">
+                        <li>
+                            <a href="#me" class="block px-3 py-2 rounded-lg font-medium text-sm text-gray-700 hover:bg-secondary-gray hover:text-primary-blue transition duration-150 ease-in-out">
+                                Myself
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#hobbies" class="block px-3 py-2 rounded-lg font-medium text-sm text-gray-700 hover:bg-secondary-gray hover:text-primary-blue transition duration-150 ease-in-out">
+                                Hobbies
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#video" class="block px-3 py-2 rounded-lg font-medium text-sm text-gray-700 hover:bg-secondary-gray hover:text-primary-blue transition duration-150 ease-in-out">
+                                Video
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#writing" class="block px-3 py-2 rounded-lg font-medium text-sm text-gray-700 hover:bg-secondary-gray hover:text-primary-blue transition duration-150 ease-in-out">
+                                Writeups
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#projects" class="block px-3 py-2 rounded-lg font-medium text-sm text-gray-700 hover:bg-secondary-gray hover:text-primary-blue transition duration-150 ease-in-out">
+                                Projects
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#future" class="block px-3 py-2 rounded-lg font-medium text-sm text-gray-700 hover:bg-secondary-gray hover:text-primary-blue transition duration-150 ease-in-out">
+                                Future
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <div class="bg-blue-50 border-l-4 border-primary-blue p-4 rounded-lg mb-12">
+            <p class="text-sm text-primary-blue font-semibold">
+                I've added two new features! Check the "Writeups" to brainstorm ideas, and the **"Projects" section now contains a playable Tic-Tac-Toe game!**
+            </p>
+        </div>
+
+        <section id="me" class="py-12 bg-secondary-gray/50 mb-10 p-6 rounded-xl shadow-inner">
+            <h2 class="text-4xl font-bold mb-4 text-primary-blue">👋 About Me</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Hey, I’m Souhardya — 23, part-time physicist, full-time overthinker. I love exploring how the universe works — and then breaking my brain trying to code it.
+
+                Physics taught me how nature thinks; coding lets me argue back. I enjoy building random projects, automating things that didn’t really need automation, and turning coffee into half-baked ideas that occasionally work.
+
+                When I’m not buried in equations or debugging at 3 AM, I’m probably reading, experimenting with side projects, or planning workouts I may or may not actually do.
+
+                I’m fascinated by how science, logic, and creativity overlap — and I’m always chasing that tiny “aha!” moment when everything suddenly makes sense (until it doesn’t again).
+                <a href="https://github.com/amisouhardya" class="text-primary-blue hover:text-blue-700 font-semibold underline">heres my github</a> or <a href="https://www.linkedin.com/in/souhardyapaul/" class="text-primary-blue hover:text-blue-700 font-semibold underline">connect with me on LinkedIn</a>.
+            </p>
+        </section>
+
+        <section id="hobbies" class="py-12 mb-10 p-6 rounded-xl">
+            <h2 class="text-3xl font-bold mb-4 text-dark-text">🎨 Hobbies</h2>
+            <p class="text-gray-700 mb-4">When I'm not coding, I enjoy these activities:</p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4 mb-8">
+                <li><a href="#" class="text-primary-blue hover:text-blue-700 font-semibold underline">Photography:</a> 📸 Primarily landscape and astrophotography, focusing on long exposure techniques.</li>
+                <li><a href="#" class="text-primary-blue hover:text-blue-700 font-semibold underline">Advantures:</a> 🚠🚠 I’m all about unplanned adventures — late-night walks, random road trips, and chasing sunsets without checking the map. I like getting lost, finding something new, and turning small moments into stories worth remembering.</li>
+                <li><a href="#" class="text-primary-blue hover:text-blue-700 font-semibold underline">Writings:</a> 🖋 I write poems when thoughts get too loud for plain sentences. Sometimes it’s about life, sometimes about nothing at all — just moments, emotions, and the silence between them..</li>
+                <li><a href="#" class="text-primary-blue hover:text-blue-700 font-semibold underline">Buiding Staff:</a>I enjoy building projects that bring ideas to life whether through code, design, or creative experimentation. For me, the process of creating is as valuable as the outcome; it’s about exploring possibilities, solving problems, and continuously learning through every attempt.
+            </ul>
+        </section>
+
+        <section id="video" class="py-12 bg-secondary-gray/50 mb-10 p-6 rounded-xl shadow-inner">
+            <h2 class="text-3xl font-bold mb-4 text-primary-blue">🎬 Video Content</h2>
+            <p class="text-gray-700 mb-4">Check out my latest video </p>
+            <div class="relative w-full overflow-hidden rounded-lg" style="padding-top: 56.25%;">
+                <iframe 
+                    class="absolute top-0 left-0 w-full h-full border-4 border-gray-300 rounded-lg" 
+                    src="https://www.youtube.com/embed/g0i_xBQTXlk?controls=0" 
+                    title="Mock Video Placeholder" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                ></iframe>
+            </div>
+            <p class="text-gray-500 text-sm mt-2">*this was my first you video*</p>
+        </section>
+
+        <section id="writing" class="py-12 mb-10 p-6 rounded-xl">
+            <h2 class="text-3xl font-bold mb-4 text-dark-text">📝 Writeups</h2>
+            <p class="text-gray-700 mb-4">A selection of recent Writeups:</p>
+            <ul class="space-y-3">
+                <li class="bg-secondary-gray p-3 rounded-lg shadow border border-gray-100 flex justify-between items-center">
+                    <span class="font-medium text-dark-text">Black Screen</span>
+                    <a href="writing.html#write1" class="text-primary-blue hover:text-blue-700 text-sm font-semibold">Read  &rarr;</a>
+                </li>
+                <li class="bg-secondary-gray p-3 rounded-lg shadow border border-gray-100 flex justify-between items-center">
+                    <span class="font-medium text-dark-text">running away from my responsibilites </span>
+                    <a href="writing.html#write2" class="text-primary-blue hover:text-blue-700 text-sm font-semibold">read &rarr;</a>
+                </li>
+            </ul>
+            
+            <div class="mt-10 pt-6 border-t border-gray-200">
+                <h3 class="text-xl font-bold text-primary-blue mb-3 flex items-center space-x-2">
+                    <span class="text-2xl">✨</span> <span>Article Idea Expander</span>
+                </h3>
+                <p class="text-sm text-gray-600 mb-3">Turn a title or idea into a professional draft outline using AI.</p>
+                <input id="article-idea-input" type="text" placeholder="E.g., Key differences between Vue and React"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-blue focus:border-primary-blue mb-4">
+                <button id="generate-article-btn" class="w-full px-4 py-3 bg-primary-blue text-white font-semibold rounded-xl hover:bg-blue-700 transition shadow-lg disabled:opacity-50 flex items-center justify-center">
+                    Generate Draft Outline
+                </button>
+                
+                <div id="article-idea-output" class="mt-6 p-4 bg-white border border-gray-200 rounded-xl shadow-inner min-h-[100px] text-gray-700 leading-relaxed hidden">
+                    <div class="flex items-center justify-center h-full">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-12 bg-secondary-gray/50 mb-10 p-6 rounded-xl shadow-inner">
+            <h2 class="text-3xl font-bold mb-4 text-primary-blue">🛠️ Projects</h2>
+            
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 mb-8">
+                <h3 class="text-2xl font-bold text-dark-text mb-4 flex items-center justify-center">
+                    Play Tic-Tac-Toe!
+                </h3>
+
+                <div id="tictactoe-status" class="text-lg font-semibold mb-4 text-center text-dark-text h-6">
+                    </div>
+
+                <div id="game-board" class="grid grid-cols-3 gap-2 max-w-xs mx-auto p-2 bg-gray-100 rounded-lg border border-gray-300">
+                    <div class="game-cell rounded-lg" data-index="0"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="1"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="2"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="3"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="4"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="5"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="6"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="7"><span></span></div>
+                    <div class="game-cell rounded-lg" data-index="8"><span></span></div>
+                </div>
+                
+                <button id="tictactoe-reset" class="mt-6 w-full px-4 py-3 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition shadow-md">
+                    Reset Game
+                </button>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <h3 class="text-xl font-bold text-dark-text mb-2">Diwali Wish</h3>
+                <p class="text-gray-600 mb-4">
+                    wish your loved ones a happy diwali with this simple web app.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="https://amisouhardya.github.io/happy_diwali/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-blue hover:bg-blue-700 transition">
+                        Live Demo
+                    </a>
+                    <a href="https://github.com/amisouhardya/happy_diwali" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-secondary-gray transition">
+                        GitHub Repo
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="future" class="py-12 mb-10 p-6 rounded-xl">
+            <h2 class="text-3xl font-bold mb-4 text-dark-text">🚀 Future & Goals</h2>
+            <p class="text-gray-700 mb-4">My key goals for the next year are:</p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                <li>Building Own NAS serever.</li>
+                <li>Travel around the world.</li>
+                <li>Make a lot a lMONEY.</li>
+                <li>Launch one new open-source project to contribute to the community.</li>
+            </ul>
+        </section>
+
+
+        <div class="h-[30vh] flex items-center justify-center border-t pt-8">
+            <p class="text-gray-400 italic">Made with 💖 by Souhardya.</p>
+        </div>
+
+    </main>
+
+    <script>
+        const API_KEY = "AIzaSyBTz9u2oUE8gQcomeOLnpMlWMSUPxNyBsM"; // Using the placeholder for Canvas environment
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=" + API_KEY;
+
+        // --- Utility Functions (for Gemini API) ---
+        async function fetchGeminiResponse(userQuery, systemPrompt) {
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            const maxRetries = 3;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && i < maxRetries - 1) {
+                            const delay = Math.pow(2, i) * 1000;
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue;
+                        }
+                        throw new Error(`API request failed with status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (!text) {
+                        throw new Error("Received empty or malformed response from API.");
+                    }
+                    return text;
+
+                } catch (error) {
+                    console.error("Gemini API Error (Attempt " + (i + 1) + "):", error.message);
+                    if (i === maxRetries - 1) {
+                        throw new Error("Failed to connect to AI service after multiple retries.");
+                    }
+                }
+            }
+        }
+        
+        // --- Gemini Feature 1: Article Idea Expander ---
+
+        const articleBtn = document.getElementById('generate-article-btn');
+        const articleInput = document.getElementById('article-idea-input');
+        const articleOutput = document.getElementById('article-idea-output');
+
+        articleBtn.addEventListener('click', async () => {
+            const idea = articleInput.value.trim();
+            if (!idea) {
+                articleOutput.innerHTML = '<p class="text-red-500">Please enter an article idea first!</p>';
+                articleOutput.classList.remove('hidden');
+                return;
+            }
+
+            // UI State: Loading
+            articleBtn.disabled = true;
+            articleBtn.innerHTML = '<div class="spinner"></div> Generating Outline...';
+            articleOutput.classList.remove('hidden');
+            articleOutput.innerHTML = '<div class="flex items-center justify-center h-24"><div class="spinner"></div></div>';
+            
+            const systemPrompt = "You are a professional blog post writer and content strategist. Your task is to take a simple article title or idea and expand it into a compelling, 3-paragraph introduction and three main section headings (Title, H1, H2, H3). The tone should be informative and engaging. Output the introduction first, followed by a clear, simple list of the three main section headings.";
+            
+            try {
+                const resultText = await fetchGeminiResponse(idea, systemPrompt);
+                
+                // Format the output: replace list indicators with proper HTML, and paragraphs with <p>
+                const formattedHtml = resultText.split('\n').map(line => {
+                    if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+                        // Assuming list items for headings
+                        return `<li class="text-dark-text font-semibold ml-4">${line.trim().substring(2)}</li>`;
+                    } else if (line.trim() !== '') {
+                        // Regular paragraph text
+                        return `<p class="mb-3">${line.trim()}</p>`;
+                    }
+                    return '';
+                }).join('');
+
+                articleOutput.innerHTML = `
+                    <h4 class="text-lg font-bold text-primary-blue mb-3">Generated Outline:</h4>
+                    ${formattedHtml}
+                `;
+
+            } catch (error) {
+                articleOutput.innerHTML = `<p class="text-red-500 font-semibold">Error: ${error.message}</p>`;
+                console.error("Article Generation Error:", error);
+            } finally {
+                // UI State: Reset
+                articleBtn.disabled = false;
+                articleBtn.innerHTML = 'Generate Draft Outline';
+            }
+        });
+
+
+        // ----------------------------------------------------------------------
+        // --- TIC-TAC-TOE GAME LOGIC (New Section) -----------------------------
+        // ----------------------------------------------------------------------
+        
+        let ttt_board = ["", "", "", "", "", "", "", "", ""]; 
+        let ttt_currentPlayer = "X"; 
+        let ttt_gameActive = true; 
+
+        const ttt_cells = document.querySelectorAll('#game-board .game-cell');
+        const ttt_statusDisplay = document.getElementById('tictactoe-status');
+        const ttt_resetButton = document.getElementById('tictactoe-reset');
+
+        const ttt_winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        const ttt_messages = {
+            playerTurn: (player) => `Player ${player}'s Turn`,
+            win: (player) => `Player ${player} has Won! 🎉`,
+            draw: () => `It's a Draw! 🤝`
+        };
+
+        function updateTttStatus(message) {
+            ttt_statusDisplay.textContent = message;
+        }
+
+        function handleTttCellPlayed(clickedCell, clickedCellIndex) {
+            ttt_board[clickedCellIndex] = ttt_currentPlayer;
+            const span = clickedCell.querySelector('span');
+            span.textContent = ttt_currentPlayer;
+            clickedCell.classList.add(ttt_currentPlayer, 'disabled');
+            clickedCell.style.cursor = 'default';
+        }
+
+        function handleTttResultValidation() {
+            let roundWon = false;
+            let winningCombo = [];
+            
+            for (let i = 0; i < ttt_winningConditions.length; i++) {
+                const combo = ttt_winningConditions[i];
+                const [a, b, c] = combo;
+                if (ttt_board[a] && ttt_board[a] === ttt_board[b] && ttt_board[a] === ttt_board[c]) {
+                    roundWon = true;
+                    winningCombo = combo;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                updateTttStatus(ttt_messages.win(ttt_currentPlayer));
+                ttt_gameActive = false;
+                
+                // Highlight winning cells
+                winningCombo.forEach(index => {
+                    ttt_cells[index].classList.add('winning-cell');
+                });
+
+                // Disable all non-winning cells visually
+                ttt_cells.forEach(cell => cell.style.cursor = 'default');
+                return;
+            }
+
+            // Check for a Draw
+            let roundDraw = !ttt_board.includes("");
+            if (roundDraw) {
+                updateTttStatus(ttt_messages.draw());
+                ttt_gameActive = false;
+                return;
+            }
+
+            // Switch players
+            handleTttPlayerChange();
+        }
+
+        function handleTttPlayerChange() {
+            ttt_currentPlayer = ttt_currentPlayer === "X" ? "O" : "X";
+            updateTttStatus(ttt_messages.playerTurn(ttt_currentPlayer));
+        }
+
+        function handleTttCellClick(event) {
+            const clickedCell = event.currentTarget;
+            const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+
+            if (ttt_board[clickedCellIndex] !== "" || !ttt_gameActive) {
+                return;
+            }
+
+            handleTttCellPlayed(clickedCell, clickedCellIndex);
+            handleTttResultValidation();
+        }
+
+        function handleTttRestartGame() {
+            // Reset state
+            ttt_gameActive = true;
+            ttt_currentPlayer = "X";
+            ttt_board = ["", "", "", "", "", "", "", "", ""];
+            
+            // Reset visuals
+            updateTttStatus(ttt_messages.playerTurn(ttt_currentPlayer));
+            ttt_cells.forEach(cell => {
+                cell.querySelector('span').textContent = "";
+                cell.classList.remove("X", "O", "disabled", "winning-cell");
+                cell.style.cursor = 'pointer';
+            });
+        }
+
+        // Initialize Tic-Tac-Toe Game
+        function initializeTttGame() {
+            updateTttStatus(ttt_messages.playerTurn(ttt_currentPlayer));
+            ttt_cells.forEach(cell => cell.addEventListener('click', handleTttCellClick));
+            ttt_resetButton.addEventListener('click', handleTttRestartGame);
+        }
+
+        // Run the initialization functions when the document loads
+        document.addEventListener('DOMContentLoaded', () => {
+             // ... your existing content loading logic if any ...
+             initializeTttGame();
+        });
+        
+    </script>
+</body>
+</html>
